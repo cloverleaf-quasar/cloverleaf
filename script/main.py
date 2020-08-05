@@ -48,6 +48,10 @@ if yml['user_params']['mask'] is True:
     maskfile = data_dir / pathlib.Path(yml['filename']['maskfits'])
 else:
     maskfile = ''
+if yml['user_params']['prior'] is True:
+    priorfile = data_dir / pathlib.Path(yml['filename']['priorfile'])
+else:
+    priorfile = ''
 optfile   = result_dir / pathlib.Path(prefix + yml['filename']['optfile'])
 imgfits   = result_dir / pathlib.Path(prefix + yml['filename']['imgfits'])
 srcfits   = result_dir / pathlib.Path(prefix + yml['filename']['srcfits'])
@@ -77,7 +81,8 @@ f.makeinput(input_b, primary_params, secondary_params, lens_models, source_model
 ### optimization ###
 proc = Popen([glafic_path, input_b], stdin=PIPE)
 # srun([glafic_path, input_b])
-proc.communicate('readobs_extend {} {}\nreadnoise_extend {}\nreadpsf {}\noptimize\nquit\n'.format(fitsfile, maskfile, noisefile, psffile).encode())
+proc.communicate('readobs_extend {} {}\nreadnoise_extend {}\nreadpsf {}\nparprior {}\noptimize\nquit\n'\
+                .format(fitsfile, maskfile, noisefile, psffile, priorfile).encode())
 # proc.stdin.write('readobs_extend {} {}\n'.format(fitsfile, maskfile).encode())
 # proc.stdin.flush()
 # proc.stdin.write('readnoise_extend {}\n'.format(noisefile).encode())
