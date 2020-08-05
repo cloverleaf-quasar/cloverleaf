@@ -1,22 +1,39 @@
 ##### dependencies #####
+import sys
 import pathlib, shutil
 import numpy as np
 import yaml
+import datetime
 from astropy import units as u
 from astropy.io import fits
 from subprocess import Popen, PIPE
+# from subprocess import run as srun
 from misc.makeinput import makeinput
 
 
-##### load yaml #####
+##### get current time #####
+now     = datetime.datetime.now()
+dirname = now.strftime('%Y%m%d_%H%M%S')
+
+##### get arguments #####
+argv = sys.argv
+argc = len(argv)
+if argc != 2:
+    raise SyntaxError('The number of arguments is wrong!')
+ymlname = argv[1]
+
+##### directory setting #####
 cur_dir        = pathlib.Path.cwd()
 cloverleaf_dir = pathlib.Path(__file__).parents[1].resolve()
-data_dir       = cloverleaf_dir / pathlib.Path('data')
-input_dir      = cloverleaf_dir / pathlib.Path('input')
-result_dir     = cloverleaf_dir / pathlib.Path('result')
+data_dir       = cloverleaf_dir / 'data'
+input_dir      = cloverleaf_dir / 'input' / dirname
+result_dir     = cloverleaf_dir / 'result' / dirname
 
-config_file = cloverleaf_dir / pathlib.Path('script/config/glafic.yaml')
-with open(config_file) as file:
+input_dir.mkdir()
+result_dir.mkdir()
+
+# config_file = cloverleaf_dir / pathlib.Path('script/config/glafic_source2.yaml')
+with open(ymlname) as file:
     yml = yaml.load(file)
 
 ##### filenames #####
@@ -57,7 +74,16 @@ makeinput(input_b, primary_params, secondary_params, lens_models, source_models,
 
 ### optimization ###
 proc = Popen([glafic_path, input_b], stdin=PIPE)
+# srun([glafic_path, input_b])
 proc.communicate('readobs_extend {} {}\nreadnoise_extend {}\nreadpsf {}\noptimize\nquit\n'.format(fitsfile, maskfile, noisefile, psffile).encode())
+# proc.stdin.write('readobs_extend {} {}\n'.format(fitsfile, maskfile).encode())
+# proc.stdin.flush()
+# proc.stdin.write('readnoise_extend {}\n'.format(noisefile).encode())
+# proc.stdin.flush()
+# proc.stdin.write('readpsf {}\n'.format(psffile).encode())
+# proc.stdin.flush()
+# proc.stdin.write('optimize\n'.encode())
+# proc.stdin.flush()
 shutil.move(cur_dir / optfile.name, optfile)
 
 ### read fitting results ###
@@ -71,7 +97,7 @@ makeinput(input_a, primary_params, secondary_params, lens_models_a, source_model
 
 ### calculate modeled image ###
 proc = Popen([glafic_path, input_a], stdin=PIPE)
-proc.communicate('writeimage 0 0\nquit\n'.encode())
+proc.communicate('readpsf {}\nwriteimage 0 0\nquit\n'.format(psffile).encode())
 shutil.move(cur_dir / imgfits.name, imgfits)
 
 ### make input_as ###
