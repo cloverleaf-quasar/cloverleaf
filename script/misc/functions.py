@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+# from astropy.wcs import WCS
 
 def makeinput(filename, primary_params, secondary_params, lens_models, source_models, lens_opt, source_opt):
     fp = open(filename, 'w')
@@ -38,17 +40,29 @@ def makeinput(filename, primary_params, secondary_params, lens_models, source_mo
     fp.close()
 
 def makefigure(imgout, imgfits, fitsfile, resfits):
-    fig, ax = plt.subplots(1, 3, figsize=(9, 3))
+    fig, ax = plt.subplots(1, 3, figsize=(10, 4))
     
-    ax[0].imshow(imgfits, origin='lower', cmap='jet')
     ax[0].axis('off')
     ax[0].set_title('obs')
-    ax[1].imshow(fitsfile, origin='lower', cmap='jet')
+    mappable0 = ax[0].imshow(imgfits, origin='lower', cmap='jet')
+    divider0  = make_axes_locatable(ax[0])
+    cax0      = divider0.append_axes('bottom', size='5%', pad=0.05)
+    fig.colorbar(mappable0, cax=cax0, orientation='horizontal')
+
     ax[1].axis('off')
     ax[1].set_title('mod')
-    ax[2].imshow(resfits, origin='lower', cmap='jet')
+    mappable1 = ax[1].imshow(fitsfile, origin='lower', cmap='jet')
+    divider1  = make_axes_locatable(ax[1])
+    cax1      = divider1.append_axes('bottom', size='5%', pad=0.05)
+    fig.colorbar(mappable1, cax=cax1, orientation='horizontal')
+
     ax[2].axis('off')
     ax[2].set_title('res')
+    mappable2 = ax[2].imshow(resfits, origin='lower', cmap='jet')
+    divider2  = make_axes_locatable(ax[2])
+    cax2      = divider2.append_axes('bottom', size='5%', pad=0.05)
+    fig.colorbar(mappable2, cax=cax2, orientation='horizontal')
 
+    fig.tight_layout()
     fig.savefig(imgout)
     fig.show()
