@@ -2,7 +2,7 @@ filename:
   obsfits:   Cloverleaf_rob0_CO_3-2_mom0_-500to500.fits
   noisefits: Cloverleaf_rob0_CO_3-2_mom0_-500to500_noise.fits
   psffits:   psf.fits
-  maskfits:  mask.fits
+  maskfits:  mask_glafic.fits
   input_b:   Akhunov.input   # glafic input (before optimization)
   input_a:   Akhunov_i.input # glafic input (after optimization for image plane)
   input_as:  Akhunov_s.input # glafic input (after optimization for source plane)
@@ -70,16 +70,17 @@ user_params:
 
 model:
   lens: |-
-    lens   sie    2.07188510e+02 -0.1776988  0.06499971 0.32 -39.7 0  0
-    lens   sie    1.70672461e+02 -1.458425   4.5250     0    0     0  0
-    lens   pert   2.558          -0.1776988  0.06499971 0.13 44.7  0  0
+    lens   sie      3.911439e+02 -1.779000e-01  6.490000e-02  3.200000e-01 -3.970000e+01  0.000000e+00  0.000000e+00
+    lens   sie      1.706725e+02 -1.884900e+00  3.654900e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00
+    lens   pert     2.558000e+00 -3.830254e+00  2.838816e+00  1.300000e-01  4.470000e+01  0.000000e+00  0.000000e+00
   source: |-
-    extend gauss  2.558 1.0795 -7.099600e-01 -2.532900e-01 0 0 0.0807 0
-
+    extend gauss  2.5580  3.339806e+00  2.003422e-01 -2.713661e-01  7.009519e-01  1.380595e+02  4.804269e-02  0.000000e+00
+    extend gauss  2.5580  5.838168e+00  3.874704e-02 -2.534461e-01  9.061680e-01 -2.094797e+02  4.447328e-02  0.000000e+00
 optimization:
   lens: |-
     0 0 0 0 0 0 0
     0 0 0 0 0 0 0
     0 0 0 0 0 0 0
   source: |-
-    0 1 1 1 1 1 1 0
+    0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0

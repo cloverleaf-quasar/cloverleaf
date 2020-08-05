@@ -1,5 +1,5 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 def makeinput(filename, primary_params, secondary_params, lens_models, source_models, lens_opt, source_opt):
     fp = open(filename, 'w')
@@ -36,3 +36,19 @@ def makeinput(filename, primary_params, secondary_params, lens_models, source_mo
     fp.write('\n')
 
     fp.close()
+
+def makefigure(imgout, imgfits, fitsfile, resfits):
+    fig, ax = plt.subplots(1, 3, figsize=(9, 3))
+    
+    ax[0].imshow(imgfits, origin='lower', cmap='jet')
+    ax[0].axis('off')
+    ax[0].set_title('obs')
+    ax[1].imshow(fitsfile, origin='lower', cmap='jet')
+    ax[1].axis('off')
+    ax[1].set_title('mod')
+    ax[2].imshow(resfits, origin='lower', cmap='jet')
+    ax[2].axis('off')
+    ax[2].set_title('res')
+
+    fig.savefig(imgout)
+    fig.show()

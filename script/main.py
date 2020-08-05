@@ -8,7 +8,7 @@ from astropy import units as u
 from astropy.io import fits
 from subprocess import Popen, PIPE
 # from subprocess import run as srun
-from misc.makeinput import makeinput
+from misc import functions as f
 
 
 ##### get current time #####
@@ -51,6 +51,7 @@ optfile   = result_dir / pathlib.Path(yml['filename']['optfile'])
 imgfits   = result_dir / pathlib.Path(yml['filename']['imgfits'])
 srcfits   = result_dir / pathlib.Path(yml['filename']['srcfits'])
 resfits   = result_dir / pathlib.Path(yml['filename']['resfits'])
+imgout    = result_dir/ pathlib.Path(yml['filename']['imgout'])
 
 glafic_path = pathlib.Path(yml['path']['glafic'])
 
@@ -70,7 +71,7 @@ source_opt       = yml['optimization']['source'].split('\n')
 
 ##### main #####
 ### make input_b ###
-makeinput(input_b, primary_params, secondary_params, lens_models, source_models, lens_opt, source_opt)
+f.makeinput(input_b, primary_params, secondary_params, lens_models, source_models, lens_opt, source_opt)
 
 ### optimization ###
 proc = Popen([glafic_path, input_b], stdin=PIPE)
@@ -93,7 +94,7 @@ with open(optfile, 'r') as fp_opt:
     source_models_a = optdata[-source_num-1:-1]
 
 ### make input_a ###
-makeinput(input_a, primary_params, secondary_params, lens_models_a, source_models_a, lens_opt, source_opt)
+f.makeinput(input_a, primary_params, secondary_params, lens_models_a, source_models_a, lens_opt, source_opt)
 
 ### calculate modeled image ###
 proc = Popen([glafic_path, input_a], stdin=PIPE)
@@ -102,7 +103,7 @@ shutil.move(cur_dir / imgfits.name, imgfits)
 
 ### make input_as ###
 primary_params['pix_ext'] = pix_ext_s
-makeinput(input_as, primary_params, secondary_params, lens_models_a, source_models_a, lens_opt, source_opt)
+f.makeinput(input_as, primary_params, secondary_params, lens_models_a, source_models_a, lens_opt, source_opt)
 
 ### output the source plane ###
 proc = Popen([glafic_path, input_as], stdin=PIPE)
@@ -113,6 +114,11 @@ shutil.move(cur_dir / srcfits.name, srcfits)
 data, header   = fits.getdata(imgfits, header=True)
 rdata, rheader = fits.getdata(fitsfile, header=True)
 if source_num > 1:
-    fits.writeto(resfits, rdata-data[-1], rheader, overwrite=True)
+    data    = data[-1]
+    resdata = rdata - data
 else:
-    fits.writeto(resfits, rdata-data, rheader, overwrite=True)
+    resdata = rdata - data
+fits.writeto(resfits, resdata, rheader, overwrite=True)
+
+### make combined image ###
+f.makefigure(imgout, rdata, data, resdata)
