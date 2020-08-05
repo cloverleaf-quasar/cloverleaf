@@ -93,6 +93,10 @@ with open(optfile, 'r') as fp_opt:
     lens_models_a   = optdata[-source_num-lens_num-1:-source_num-1]
     source_models_a = optdata[-source_num-1:-1]
 
+    statdata = optdata[-source_num-lens_num-1-8].split()
+    chi2     = float(statdata[2])
+    ndata    = int(statdata[-1].rstrip(']'))
+
 ### make input_a ###
 f.makeinput(input_a, primary_params, secondary_params, lens_models_a, source_models_a, lens_opt, source_opt)
 
@@ -122,3 +126,19 @@ fits.writeto(resfits, resdata, rheader, overwrite=True)
 
 ### make combined image ###
 f.makefigure(imgout, rdata, data, resdata)
+
+### make statistics ###
+print('')
+print('summary')
+print('===================================')
+print('chi^2 = {:.1e}'.format(chi2))
+print('Ndata = {}'.format(ndata))
+print('reduced chi^2 = {:.1f}'.format(chi2/ndata))
+print('')
+print('raw max = {}'.format(rdata.max()))
+print('raw min = {}'.format(rdata.min()))
+print('model max = {}'.format(data.max()))
+print('model min = {}'.format(data.min()))
+print('residual max = {}'.format(resdata.max()))
+print('residual min = {}'.format(resdata.min()))
+print('===================================')
