@@ -37,9 +37,10 @@ with open(ymlname) as file:
     yml = yaml.load(file)
 
 ##### filenames #####
-input_b   = input_dir / pathlib.Path(yml['filename']['input_b'])
-input_a   = input_dir / pathlib.Path(yml['filename']['input_a'])
-input_as  = input_dir / pathlib.Path(yml['filename']['input_as'])
+prefix    = yml['primary_params']['prefix']
+input_b   = input_dir / pathlib.Path(prefix + yml['filename']['input_b'])
+input_a   = input_dir / pathlib.Path(prefix + yml['filename']['input_a'])
+input_as  = input_dir / pathlib.Path(prefix + yml['filename']['input_as'])
 fitsfile  = data_dir / pathlib.Path(yml['filename']['obsfits'])
 noisefile = data_dir / pathlib.Path(yml['filename']['noisefits'])
 psffile   = data_dir / pathlib.Path(yml['filename']['psffits'])
@@ -47,10 +48,10 @@ if yml['user_params']['mask'] is True:
     maskfile = data_dir / pathlib.Path(yml['filename']['maskfits'])
 else:
     maskfile = ''
-optfile   = result_dir / pathlib.Path(yml['filename']['optfile'])
-imgfits   = result_dir / pathlib.Path(yml['filename']['imgfits'])
-srcfits   = result_dir / pathlib.Path(yml['filename']['srcfits'])
-resfits   = result_dir / pathlib.Path(yml['filename']['resfits'])
+optfile   = result_dir / pathlib.Path(prefix + yml['filename']['optfile'])
+imgfits   = result_dir / pathlib.Path(prefix + yml['filename']['imgfits'])
+srcfits   = result_dir / pathlib.Path(prefix + yml['filename']['srcfits'])
+resfits   = result_dir / pathlib.Path(prefix + yml['filename']['resfits'])
 imgout    = result_dir/ pathlib.Path(yml['filename']['imgout'])
 
 glafic_path = pathlib.Path(yml['path']['glafic'])
