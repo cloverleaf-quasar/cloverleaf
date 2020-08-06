@@ -40,6 +40,7 @@ result_dir.mkdir()
 # config_file = cloverleaf_dir / pathlib.Path('script/config/glafic_source2.yaml')
 with open(ymlname) as file:
     yml = yaml.load(file)
+shutil.copy(ymlname, input_dir)
 
 ##### filenames #####
 prefix    = yml['primary_params']['prefix']
@@ -51,10 +52,12 @@ noisefile = data_dir / pathlib.Path(yml['filename']['noisefits'])
 psffile   = data_dir / pathlib.Path(yml['filename']['psffits'])
 if yml['user_params']['mask']:
     maskfile = data_dir / pathlib.Path(yml['filename']['maskfits'])
+    shutil.copy(maskfile, input_dir)
 else:
     maskfile = ''
 if yml['user_params']['prior']:
     priorfile = data_dir / pathlib.Path(yml['filename']['priorfile'])
+    shutil.copy(priorfile, input_dir)
 else:
     priorfile = ''
 optfile   = result_dir / pathlib.Path(prefix + yml['filename']['optfile'])
