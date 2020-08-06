@@ -43,7 +43,7 @@ def makeinput(filename, primary_params, secondary_params, lens_models, source_mo
 def makefigure(imgout, imgfits, fitsfile, resfits):
     fig, ax = plt.subplots(1, 3, figsize=(10, 4))
     
-    title = ['obs', 'res', 'mod']
+    title = ['obs', 'mod', 'res']
     data  = [imgfits, fitsfile, resfits]
     for ax_, title_, data_ in zip(ax, title, data):
         ax_.axis('off')

@@ -18,9 +18,14 @@ anaid = now.strftime('%Y%m%d_%H%M%S')
 ##### get arguments #####
 argv = sys.argv
 argc = len(argv)
-if argc != 2:
+if argc != 2 and argc != 3:
     raise SyntaxError('The number of arguments is wrong!')
-ymlname = argv[1]
+if '-qlook' in argv:
+    qlook = True
+    argv.remove('-qlook')
+else:
+    qlook = False
+ymlname = argv[-1]
 
 ##### directory setting #####
 cur_dir        = pathlib.Path.cwd()
@@ -44,11 +49,11 @@ input_as  = input_dir / pathlib.Path(prefix + yml['filename']['input_as'])
 fitsfile  = data_dir / pathlib.Path(yml['filename']['obsfits'])
 noisefile = data_dir / pathlib.Path(yml['filename']['noisefits'])
 psffile   = data_dir / pathlib.Path(yml['filename']['psffits'])
-if yml['user_params']['mask'] is True:
+if yml['user_params']['mask']:
     maskfile = data_dir / pathlib.Path(yml['filename']['maskfits'])
 else:
     maskfile = ''
-if yml['user_params']['prior'] is True:
+if yml['user_params']['prior']:
     priorfile = data_dir / pathlib.Path(yml['filename']['priorfile'])
 else:
     priorfile = ''
@@ -150,3 +155,8 @@ print('model min = {}'.format(data.min()))
 print('residual max = {}'.format(resdata.max()))
 print('residual min = {}'.format(resdata.min()))
 print('===================================')
+
+### qlook ###
+if qlook:
+    shutil.rmtree(input_dir)
+    shutil.rmtree(result_dir)
