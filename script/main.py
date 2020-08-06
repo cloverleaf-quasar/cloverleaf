@@ -12,8 +12,8 @@ from misc import functions as f
 
 
 ##### get current time #####
-now     = datetime.datetime.now()
-dirname = now.strftime('%Y%m%d_%H%M%S')
+now   = datetime.datetime.now()
+anaid = now.strftime('%Y%m%d_%H%M%S')
 
 ##### get arguments #####
 argv = sys.argv
@@ -26,8 +26,8 @@ ymlname = argv[1]
 cur_dir        = pathlib.Path.cwd()
 cloverleaf_dir = pathlib.Path(__file__).parents[1].resolve()
 data_dir       = cloverleaf_dir / 'data'
-input_dir      = cloverleaf_dir / 'input' / dirname
-result_dir     = cloverleaf_dir / 'result' / dirname
+input_dir      = cloverleaf_dir / 'input' / anaid
+result_dir     = cloverleaf_dir / 'result' / anaid
 
 input_dir.mkdir()
 result_dir.mkdir()
@@ -134,6 +134,8 @@ fits.writeto(resfits, resdata, rheader, overwrite=True)
 f.makefigure(imgout, rdata, data, resdata)
 
 ### make statistics ###
+# statdict = {'chi^2': chi2, 'Ndata': ndata, 'reduced chi^2': chi2 / data,
+#             'obs max': }
 print('')
 print('summary')
 print('===================================')
