@@ -63,6 +63,8 @@ def makestats(statout, statdict, show=True):
         print('')
         print('summary')
         print('===================================')
+        print('elapsed time = {:.1e} [sec]'.format(statdict['elapsed time']))
+        print('')
         print('chi^2 = {:.1e}'.format(statdict['chi^2']))
         print('Ndata = {}'.format(statdict['Ndata']))
         print('reduced chi^2 = {:.1f}'.format(statdict['reduced chi^2']))

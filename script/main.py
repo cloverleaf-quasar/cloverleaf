@@ -3,7 +3,7 @@ import sys
 import pathlib, shutil
 import numpy as np
 import yaml
-import datetime
+import time, datetime
 from astropy import units as u
 from astropy.io import fits
 from subprocess import Popen, PIPE
@@ -12,6 +12,7 @@ from misc import functions as f
 
 ##### get current time #####
 now   = datetime.datetime.now()
+start = time.time()
 anaid = now.strftime('%Y%m%d_%H%M%S')
 
 ##### get arguments #####
@@ -149,7 +150,8 @@ fits.writeto(resfits, resdata, rheader, overwrite=True)
 f.makefigure(imgout, rdata, data, resdata)
 
 ### make statistics ###
-statdict = {'chi^2': chi2, 'Ndata': ndata, 'reduced chi^2': chi2 / ndata,
+elapsed_time = time.time() - start
+statdict = {'elapsed time': elapsed_time, 'chi^2': chi2, 'Ndata': ndata, 'reduced chi^2': chi2 / ndata,
             'obs max': rdata.max(), 'obs min': rdata.min(),
             'mod max': data.max(), 'mod min': data.min(),
             'res max': resdata.max(), 'res min': resdata.min()}
