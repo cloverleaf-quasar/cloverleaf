@@ -7,7 +7,6 @@ import datetime
 from astropy import units as u
 from astropy.io import fits
 from subprocess import Popen, PIPE
-# from subprocess import run as srun
 from misc import functions as f
 
 
@@ -37,29 +36,33 @@ result_dir     = cloverleaf_dir / 'result' / anaid
 input_dir.mkdir()
 result_dir.mkdir()
 
-# config_file = cloverleaf_dir / pathlib.Path('script/config/glafic_source2.yaml')
 with open(ymlname) as file:
     yml = yaml.load(file)
 shutil.copy(ymlname, input_dir)
 
 ##### filenames #####
 prefix    = yml['primary_params']['prefix']
-input_b   = input_dir / pathlib.Path(prefix + yml['filename']['input_b'])
-input_a   = input_dir / pathlib.Path(prefix + yml['filename']['input_a'])
-input_as  = input_dir / pathlib.Path(prefix + yml['filename']['input_as'])
 fitsfile  = data_dir / pathlib.Path(yml['filename']['obsfits'])
 noisefile = data_dir / pathlib.Path(yml['filename']['noisefits'])
 psffile   = data_dir / pathlib.Path(yml['filename']['psffits'])
-if yml['user_params']['mask']:
+
+mask  = yml['user_params']['mask']
+prior = yml['user_params']['prior']
+mcmc  = yml['user_params']['mcmc']
+if mask:
     maskfile = data_dir / pathlib.Path(yml['filename']['maskfits'])
     shutil.copy(maskfile, input_dir)
 else:
     maskfile = ''
-if yml['user_params']['prior']:
+if prior:
     priorfile = data_dir / pathlib.Path(yml['filename']['priorfile'])
     shutil.copy(priorfile, input_dir)
 else:
     priorfile = ''
+
+input_b   = input_dir / pathlib.Path(prefix + yml['filename']['input_b'])
+input_a   = input_dir / pathlib.Path(prefix + yml['filename']['input_a'])
+input_as  = input_dir / pathlib.Path(prefix + yml['filename']['input_as'])
 optfile   = result_dir / pathlib.Path(prefix + yml['filename']['optfile'])
 imgfits   = result_dir / pathlib.Path(prefix + yml['filename']['imgfits'])
 srcfits   = result_dir / pathlib.Path(prefix + yml['filename']['srcfits'])
@@ -72,7 +75,7 @@ glafic_path = pathlib.Path(yml['path']['glafic'])
 zs        = yml['user_params']['zs']
 pix_ext_s = yml['user_params']['pix_ext_s']
 
-## input info
+##### model info #####
 primary_params   = yml['primary_params']
 secondary_params = yml['secondary_params']
 lens_models      = yml['model']['lens'].split('\n')
@@ -88,17 +91,8 @@ f.makeinput(input_b, primary_params, secondary_params, lens_models, source_model
 
 ### optimization ###
 proc = Popen([glafic_path, input_b], stdin=PIPE)
-# srun([glafic_path, input_b])
 proc.communicate('readobs_extend {} {}\nreadnoise_extend {}\nreadpsf {}\nparprior {}\noptimize\nquit\n'\
                 .format(fitsfile, maskfile, noisefile, psffile, priorfile).encode())
-# proc.stdin.write('readobs_extend {} {}\n'.format(fitsfile, maskfile).encode())
-# proc.stdin.flush()
-# proc.stdin.write('readnoise_extend {}\n'.format(noisefile).encode())
-# proc.stdin.flush()
-# proc.stdin.write('readpsf {}\n'.format(psffile).encode())
-# proc.stdin.flush()
-# proc.stdin.write('optimize\n'.encode())
-# proc.stdin.flush()
 shutil.move(cur_dir / optfile.name, optfile)
 
 ### read fitting results ###
@@ -118,6 +112,18 @@ f.makeinput(input_a, primary_params, secondary_params, lens_models_a, source_mod
 proc = Popen([glafic_path, input_a], stdin=PIPE)
 proc.communicate('readpsf {}\nwriteimage 0 0\nquit\n'.format(psffile).encode())
 shutil.move(cur_dir / imgfits.name, imgfits)
+
+### mcmc ###
+if mcmc:
+    mcmcfile  = result_dir / pathlib.Path(prefix + yml['filename']['mcmcfile'])
+    sigmafile = data_dir / pathlib.Path(yml['filename']['sigmafile'])
+    mcmc_n    = yml['user_params']['mcmc_n']
+    shutil.copy(sigmafile, input_dir)
+
+    proc = Popen([glafic_path, input_a], stdin=PIPE)
+    proc.communicate('readobs_extend {} {}\nreadnoise_extend {}\nreadpsf{}\nparprior {}\nmcmc_sigma {}\nmcmc {} extend\nquit\n'\
+                    .format(fitsfile, maskfile, noisefile, psffile, priorfile, sigmafile, mcmc_n).encode())
+    shutil.move(cur_dir / mcmcfile.name, mcmcfile)
 
 ### make input_as ###
 primary_params['pix_ext'] = pix_ext_s
