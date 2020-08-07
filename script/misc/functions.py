@@ -59,17 +59,21 @@ def makefigure(imgout, imgfits, fitsfile, resfits):
 
 def makestats(statout, statdict, show=True):
     ### to be updated
+    with open(statout, 'w') as fp:
+        for key, value in statdict.items():
+            fp.write(f'{key}\t{value}\n')
+
     if show:
         print('')
         print('summary')
         print('===================================')
-        print('elapsed time = {:.1e} [sec]'.format(statdict['elapsed time']))
+        print('elapsed time = {:.1e} [sec]'.format(statdict['elapsed_time']))
         print('')
         print('chi^2 = {:.1e}'.format(statdict['chi^2']))
         print('Ndata = {}'.format(statdict['Ndata']))
-        print('reduced chi^2 = {:.1f}'.format(statdict['reduced chi^2']))
+        print('reduced chi^2 = {:.1f}'.format(statdict['reduced_chi^2']))
         print('')
-        print('obs min/max = {:.2e} / {:.2e}'.format(statdict['obs min'], statdict['obs max']))
-        print('mod min/max = {:.2e} / {:.2e}'.format(statdict['mod min'], statdict['mod max']))
-        print('res min/max = {:.2e} / {:.2e}'.format(statdict['res min'], statdict['res max']))
+        print('obs min/max = {:.2e} / {:.2e}'.format(statdict['obs_min'], statdict['obs_max']))
+        print('mod min/max = {:.2e} / {:.2e}'.format(statdict['mod_min'], statdict['mod_max']))
+        print('res min/max = {:.2e} / {:.2e}'.format(statdict['res_min'], statdict['res_max']))
         print('===================================')

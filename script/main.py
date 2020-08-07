@@ -151,10 +151,10 @@ f.makefigure(imgout, rdata, data, resdata)
 
 ### make statistics ###
 elapsed_time = time.time() - start
-statdict = {'elapsed time': elapsed_time, 'chi^2': chi2, 'Ndata': ndata, 'reduced chi^2': chi2 / ndata,
-            'obs max': rdata.max(), 'obs min': rdata.min(),
-            'mod max': data.max(), 'mod min': data.min(),
-            'res max': resdata.max(), 'res min': resdata.min()}
+statdict = {'elapsed_time': elapsed_time, 'chi^2': chi2, 'Ndata': ndata, 'reduced_chi^2': chi2 / ndata,
+            'obs_max': rdata.max(), 'obs_min': rdata.min(),
+            'mod_max': data.max(), 'mod_min': data.min(),
+            'res_max': resdata.max(), 'res_min': resdata.min()}
 f.makestats(statout, statdict)
 
 ### qlook ###
