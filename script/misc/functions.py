@@ -57,5 +57,17 @@ def makefigure(imgout, imgfits, fitsfile, resfits):
     fig.savefig(imgout)
     fig.show()
 
-def makestats(statout, statdict):
-    pass
+def makestats(statout, statdict, show=True):
+    ### to be updated
+    if show:
+        print('')
+        print('summary')
+        print('===================================')
+        print('chi^2 = {:.1e}'.format(statdict['chi^2']))
+        print('Ndata = {}'.format(statdict['Ndata']))
+        print('reduced chi^2 = {:.1f}'.format(statdict['reduced chi^2']))
+        print('')
+        print('obs min/max = {:.2e} / {:.2e}'.format(statdict['obs min'], statdict['obs max']))
+        print('mod min/max = {:.2e} / {:.2e}'.format(statdict['mod min'], statdict['mod max']))
+        print('res min/max = {:.2e} / {:.2e}'.format(statdict['res min'], statdict['res max']))
+        print('===================================')

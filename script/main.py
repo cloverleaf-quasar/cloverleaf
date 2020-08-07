@@ -68,6 +68,7 @@ imgfits   = result_dir / pathlib.Path(prefix + yml['filename']['imgfits'])
 srcfits   = result_dir / pathlib.Path(prefix + yml['filename']['srcfits'])
 resfits   = result_dir / pathlib.Path(prefix + yml['filename']['resfits'])
 imgout    = result_dir/ pathlib.Path(yml['filename']['imgout'])
+statout   = result_dir/ pathlib.Path(yml['filename']['statout'])
 
 glafic_path = pathlib.Path(yml['path']['glafic'])
 
@@ -148,22 +149,11 @@ fits.writeto(resfits, resdata, rheader, overwrite=True)
 f.makefigure(imgout, rdata, data, resdata)
 
 ### make statistics ###
-# statdict = {'chi^2': chi2, 'Ndata': ndata, 'reduced chi^2': chi2 / data,
-#             'obs max': }
-print('')
-print('summary')
-print('===================================')
-print('chi^2 = {:.1e}'.format(chi2))
-print('Ndata = {}'.format(ndata))
-print('reduced chi^2 = {:.1f}'.format(chi2/ndata))
-print('')
-print('raw max = {}'.format(rdata.max()))
-print('raw min = {}'.format(rdata.min()))
-print('model max = {}'.format(data.max()))
-print('model min = {}'.format(data.min()))
-print('residual max = {}'.format(resdata.max()))
-print('residual min = {}'.format(resdata.min()))
-print('===================================')
+statdict = {'chi^2': chi2, 'Ndata': ndata, 'reduced chi^2': chi2 / ndata,
+            'obs max': rdata.max(), 'obs min': rdata.min(),
+            'mod max': data.max(), 'mod min': data.min(),
+            'res max': resdata.max(), 'res min': resdata.min()}
+f.makestats(statout, statdict)
 
 ### qlook ###
 if qlook:
