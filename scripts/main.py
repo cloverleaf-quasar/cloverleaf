@@ -8,7 +8,7 @@ import datetime
 
 from astropy.io import fits
 from subprocess import Popen, PIPE
-from .utils import functions as f
+from utils import functions as f
 
 
 # get current time
