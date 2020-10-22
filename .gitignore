@@ -1,7 +1,7 @@
 data/
 input/
 paper/
-result/
+results/
 
 # Editor settings
 .vscode
