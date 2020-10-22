@@ -27,7 +27,7 @@ header = pic.header
 data = pic.data
 
 #### header情報の取得 ####
-#OBSRA   =   2.139427083333E+02  deg                                             
+#OBSRA   =   2.139427083333E+02  deg
 #OBSDEC  =   1.149538888889E+01 deg
 obsra = header['OBSRA']
 obsdec = header['OBSDEC']
@@ -60,11 +60,11 @@ print(str(fits)+'の'+'Decl.:',obsdec_arcsec,'arcsec')
 #### 変換 ####
 
 #### example ####
-## Venturini 2003 
+## Venturini 2003
 # R.A. 14h15m46.233s
 # Decl. 11d29'43.50"
 
-## Akhunov 2017 
+## Akhunov 2017
 # R.A. 14h15m46.222s
 # Decl. 11d29'43.015"
 
@@ -72,11 +72,11 @@ print(str(fits)+'の'+'Decl.:',obsdec_arcsec,'arcsec')
 
 ra = Angle(input('R.A.を入力( # Hour, minute, second )'))
 RA_result = ra.degree
-           
+
 # Decl.
 dec = Angle(input('Decl.を入力(# Degree, arcmin, arcsec )'))
 Decl_result = dec.degree
- 
+
 #### 表示 ####
 print('R.A.:',ra.degree,'deg',',',ra.arcsec,'arcsec')
 print('Decl.:',dec.degree,'deg',',',dec.arcsec,'arcsec')
@@ -103,7 +103,7 @@ print('Decl.:',dec.degree,'deg',',',dec.arcsec,'arcsec')
 ## Decl. (arcsec)
 ## dec.arcsec
 
-#### 実行 #### 
+#### 実行 ####
 RA_sa_sekidou = obsra_arcsec - ra.arcsec
 Decl_sa = obsdec_arcsec - dec.arcsec
 

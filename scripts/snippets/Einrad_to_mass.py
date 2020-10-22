@@ -14,7 +14,7 @@ from astropy.constants import pc
 
 ### パーセク
 # lens
-#D_com_lens = 5.2363e+9 
+#D_com_lens = 5.2363e+9
 D_com_lens = float(input('lensの共動距離(Mpc)(http://www.astro.ucla.edu/):')) * 1.0e+6
 
 # source
@@ -44,7 +44,7 @@ D_lens = pc * float(input('lensの角形距離(Mpc)(http://www.astro.ucla.edu/)�
 print('lens:',D_lens)
 
 #### source ####
-# 1697.4 Mpc 
+# 1697.4 Mpc
 #source_kaku = pc * 1.6974e+9
 D_source = pc * float(input('sourceの角形距離(Mpc)(http://www.astro.ucla.edu/)：')) *1.0e+6
 print('source:',D_source)
@@ -79,10 +79,10 @@ from astropy.constants import G
 # M :　質量(kg)
 
 ### 計算 ###
-M_0 = rad**2 
+M_0 = rad**2
 print('M_0',M_0)
 
-M_1 = c**2 
+M_1 = c**2
 print('M_1:',M_1)
 
 M_2 = D_lens * D_source
