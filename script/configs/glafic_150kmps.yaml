@@ -1,0 +1,86 @@
+filename:
+  obsfits:   Cloverleaf_CO_3-2_+150kmps.fits
+  noisefits: Cloverleaf_CO_3-2_+150kmps_noise.fits #rms 4e-5
+  psffits:   psf.fits
+  maskfits:  mask_glafic.fits
+  priorfile: priorfile.dat
+  input_b:   .input   # glafic input (before optimization)
+  input_a:   _i.input # glafic input (after optimization for image plane)
+  input_as:  _s.input # glafic input (after optimization for source plane)
+  optfile:   _optresult.dat  # file suffix for optimized result
+  imgfits:   _image.fits
+  srcfits:   _source.fits
+  resfits:   _residual.fits
+  imgout:    result.png
+
+path:
+  glafic: /Users/tsuyoshi/Software/Glafic/glafic
+
+primary_params:
+  omega:     0.308
+  lambda:    0.692
+  weos:      -1.0
+  hubble:    0.678
+  zl:        1.95
+  prefix:    sie_es_150km_s
+  xmin:      -2.514375845630348
+  ymin:      -2.525500073621787
+  xmax:      2.4906241543699115
+  ymax:      2.4794999263784727
+  pix_ext:   0.077
+  pix_poi:   0.2
+  maxlev:    6
+
+secondary_params:
+  galfile:        galfile.dat
+  srcfile:        srcfile.dat
+  ran_seed:       -1234
+  outformat_exp:  1
+  flag_hodensity: 0
+  hodensity:      200.0
+  gnfw_usetab:    1
+  ein_usetab:     1
+  nfw_users:      0
+  flag_extnorm:   0
+  chi2_checknimg: 0
+  chi2_splane:    1
+  chi2_usemag:    0
+  chi2_restart:   -1
+  obs_gain:       3.0
+  obs_ncomb:      1
+  obs_readnoise:  10.0
+  skyfix:         0
+  skyfix_value:   10000000000.0
+  psfconv_size:   0.034
+  seeing_sub:     1
+  flag_srcsbin:   1
+  srcsbinsize:    20.0
+  flag_mcmcall:   0
+  addwcs:         0
+  wcs_ra0:        213.9425958333   # to be updated
+  wcs_dec0:       11.4954166667 # to be updated
+  ovary:          0
+  lvary:          0
+  wvary:          0
+  hvary:          0
+
+user_params:
+  zs:        2.55772 # user-defined
+  pix_ext_s: 0.025 # user-defined
+  mask:      True
+  prior:     True
+
+model:
+  lens: |-
+    lens sie  4.030540e+02 -2.214785e-01  1.816686e-01  3.787071e-01  1.762101e+02  0.000000e+00  0.000000e+00
+    lens pert 2.557720e+00 -2.214785e-01  1.816686e-01  1.302442e-01  5.323314e+01  0.000000e+00  0.000000e+00
+  source: |-
+    extend gauss  2.5577  5.761140e-03 0.52  0.23   2.336341e-01  1.091437e+02  8.196213e-02  0.000000e+00
+#    extend gauss  2.5577  7.070077e-03 -1.761751e-01  1.492069e-01  0             0             9.990782e-02  0.000000e+00
+optimization:
+  lens: |-
+    0 0 0 0 0 0 0
+    0 0 0 0 0 0 0
+  source: |-
+    0 1 1 1 1 1 1 0
+#    0 1 1 1 0 0 1 0
