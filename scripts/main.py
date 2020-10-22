@@ -7,7 +7,7 @@ import time, datetime
 from astropy import units as u
 from astropy.io import fits
 from subprocess import Popen, PIPE
-from misc import functions as f
+from utils import functions as f
 
 
 ##### get current time #####
@@ -32,10 +32,10 @@ cur_dir        = pathlib.Path.cwd()
 cloverleaf_dir = pathlib.Path(__file__).parents[1].resolve()
 data_dir       = cloverleaf_dir / 'data'
 input_dir      = cloverleaf_dir / 'input' / anaid
-result_dir     = cloverleaf_dir / 'result' / anaid
+results_dir     = cloverleaf_dir / 'results' / anaid
 
 input_dir.mkdir()
-result_dir.mkdir()
+results_dir.mkdir()
 
 with open(ymlname) as file:
     yml = yaml.load(file)
@@ -64,12 +64,12 @@ else:
 input_b   = input_dir / pathlib.Path(prefix + yml['filename']['input_b'])
 input_a   = input_dir / pathlib.Path(prefix + yml['filename']['input_a'])
 input_as  = input_dir / pathlib.Path(prefix + yml['filename']['input_as'])
-optfile   = result_dir / pathlib.Path(prefix + yml['filename']['optfile'])
-imgfits   = result_dir / pathlib.Path(prefix + yml['filename']['imgfits'])
-srcfits   = result_dir / pathlib.Path(prefix + yml['filename']['srcfits'])
-resfits   = result_dir / pathlib.Path(prefix + yml['filename']['resfits'])
-imgout    = result_dir/ pathlib.Path(yml['filename']['imgout'])
-statout   = result_dir/ pathlib.Path(yml['filename']['statout'])
+optfile   = results_dir / pathlib.Path(prefix + yml['filename']['optfile'])
+imgfits   = results_dir / pathlib.Path(prefix + yml['filename']['imgfits'])
+srcfits   = results_dir / pathlib.Path(prefix + yml['filename']['srcfits'])
+resfits   = results_dir / pathlib.Path(prefix + yml['filename']['resfits'])
+imgout    = results_dir/ pathlib.Path(yml['filename']['imgout'])
+statout   = results_dir/ pathlib.Path(yml['filename']['statout'])
 
 glafic_path = pathlib.Path(yml['path']['glafic'])
 
@@ -117,7 +117,7 @@ shutil.move(cur_dir / imgfits.name, imgfits)
 
 ### mcmc ###
 if mcmc:
-    mcmcfile  = result_dir / pathlib.Path(prefix + yml['filename']['mcmcfile'])
+    mcmcfile  = results_dir / pathlib.Path(prefix + yml['filename']['mcmcfile'])
     sigmafile = data_dir / pathlib.Path(yml['filename']['sigmafile'])
     mcmc_n    = yml['user_params']['mcmc_n']
     shutil.copy(sigmafile, input_dir)
@@ -160,4 +160,4 @@ f.makestats(statout, statdict)
 ### qlook ###
 if qlook:
     shutil.rmtree(input_dir)
-    shutil.rmtree(result_dir)
+    shutil.rmtree(results_dir)
